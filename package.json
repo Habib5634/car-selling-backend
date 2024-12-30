@@ -1,0 +1,14 @@
+{
+  "name": "car-selling-backend",
+  "version": "1.0.0",
+  "description": "this website is for buying and selling cars old and new",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Raja Habib Ahmed",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^8.9.2"
+  }
+}
