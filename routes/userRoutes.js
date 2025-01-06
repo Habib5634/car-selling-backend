@@ -1,7 +1,7 @@
 const express = require('express')
 
 const authMiddleware = require('../middlewares/authMiddleware')
-const { addCarController, getAcceptedCars, getCarById, getAllCategoriesController, getCategoryByIdController, getLatestAcceptedCars, deleteCarById, updateCarDetailsById, getProductsByCategoryController } = require('../controllers/carController')
+const { addCarController, getAcceptedCars, getCarById, getAllCategoriesController, getCategoryByIdController, getLatestAcceptedCars, deleteCarById, updateCarDetailsById, getProductsByCategoryController, userPostedCarsController } = require('../controllers/carController')
 const { sendMessageController, getMessagesController, getConversationController, markMessagesAsReadController, deleteMessageController, deleteConversationController } = require('../controllers/chatController')
 const router = express.Router()
 
@@ -31,6 +31,8 @@ router.patch('/update-car/:id',authMiddleware,updateCarDetailsById)
 // get category Cars
 router.get("/category-products/:categoryId",getProductsByCategoryController)
 
+// get user cars 
+router.get('/user-cars/',authMiddleware,userPostedCarsController)
 // send message 
 router.post('/send/',authMiddleware,sendMessageController)
 

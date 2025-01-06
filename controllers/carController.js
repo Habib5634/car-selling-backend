@@ -352,6 +352,43 @@ const getProductsByCategoryController = async (req, res) => {
 };
 
 
+// get user posted cars 
+const userPostedCarsController = async (req, res) => {
+    try {
+      const userId = req.user._id; // Get the logged-in user's ID from the request
+  
+      // Fetch cars posted by the user
+      const userCars = await carModel
+        .find({ sellerId: userId })
+        .populate("carCategory", "name") // Populate category details (if needed)
+        .select("-__v") // Exclude unnecessary fields
+        .sort({ createdAt: -1 }); // Sort by most recent
+  
+      // Check if the user has posted any cars
+      if (userCars.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "No cars posted by this user.",
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        message: "Cars posted by the user retrieved successfully.",
+        cars: userCars,
+      });
+    } catch (error) {
+      console.error("Error fetching user's posted cars:", error);
+      res.status(500).json({
+        success: false,
+        message: "Error retrieving user's posted cars.",
+        error,
+      });
+    }
+  };
+  
 
 
-module.exports = { addCategoryController, addCarController, getAcceptedCars, getCarById,getAllCategoriesController,getCategoryByIdController,getLatestAcceptedCars,deleteCarById,updateCarDetailsById ,getProductsByCategoryController}
+
+
+module.exports = { addCategoryController, addCarController, getAcceptedCars, getCarById,getAllCategoriesController,getCategoryByIdController,getLatestAcceptedCars,deleteCarById,updateCarDetailsById ,getProductsByCategoryController,userPostedCarsController}
