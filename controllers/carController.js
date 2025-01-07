@@ -260,7 +260,7 @@ const getLatestAcceptedCars = async (req, res) => {
       const latestCars = await carModel.find({ status: 'accepted', isActive: true })
         .sort({ createdAt: -1 }) // Sort by creation date, newest first
         .limit(10)
-        .populate('sellerId', 'frstName lastName email') // Populate seller information
+        .populate('sellerId', 'firstName lastName email') // Populate seller information
         .populate('carCategory', 'name'); // Populate category information
   
       res.status(200).json({ success: true, cars: latestCars });

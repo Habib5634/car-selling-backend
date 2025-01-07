@@ -80,64 +80,64 @@ const sendMessageController = async (req, res) => {
   
   
   // Controller to Get Messages for a Conversation
-const getMessagesController = async (req, res) => {
-    try {
-        const { conversationId } = req.params;
-  
-        // Find the conversation by ID and populate messages
-        const conversation = await conversationModel.findById(conversationId)
-            .populate({
-                path: "messages",
-                populate: {
-                    path: "senderId receiverId",
-                    select: "firstName lastName profile email"
-                }
-            });
-  
-        if (!conversation) {
-            return res.status(404).json({ message: "Conversation not found" });
-        }
-  
-        res.status(200).json({
-            conversationId,
-            messages: conversation.messages
-        });
-    } catch (error) {
-        console.error("Error retrieving messages:", error);
-        res.status(500).json({ message: "Error retrieving messages", error });
-    }
-  };
-
-//   const getMessagesController = async (req, res) => {
+// const getMessagesController = async (req, res) => {
 //     try {
-//       const { conversationId } = req.params;
+//         const { conversationId } = req.params;
   
-//       // Find the conversation by ID and populate participants and messages
-//       const conversation = await conversationModel.findById(conversationId)
-//         .populate({
-//           path: "participants",
-//           select: "firstName lastName profile email",
-//         })
-//         .populate({
-//           path: "messages",
-//           select: "message isRead createdAt",
+//         // Find the conversation by ID and populate messages
+//         const conversation = await conversationModel.findById(conversationId)
+//             .populate({
+//                 path: "messages",
+//                 populate: {
+//                     path: "senderId receiverId",
+//                     select: "firstName lastName profile email"
+//                 }
+//             });
+  
+//         if (!conversation) {
+//             return res.status(404).json({ message: "Conversation not found" });
+//         }
+  
+//         res.status(200).json({
+//             conversationId,
+//             messages: conversation.messages
 //         });
-  
-//       if (!conversation) {
-//         return res.status(404).json({ message: "Conversation not found" });
-//       }
-  
-//       // Prepare a response that separates participants and messages
-//       res.status(200).json({
-//         conversationId,
-//         participants: conversation.participants, // Participant details
-//         messages: conversation.messages, // List of messages without repeated participant info
-//       });
 //     } catch (error) {
-//       console.error("Error retrieving messages:", error);
-//       res.status(500).json({ message: "Error retrieving messages", error });
+//         console.error("Error retrieving messages:", error);
+//         res.status(500).json({ message: "Error retrieving messages", error });
 //     }
 //   };
+
+  const getMessagesController = async (req, res) => {
+    try {
+      const { conversationId } = req.params;
+  
+      // Find the conversation by ID and populate participants and messages
+      const conversation = await conversationModel.findById(conversationId)
+        .populate({
+          path: "participants",
+          select: "firstName lastName profile email",
+        })
+        .populate({
+          path: "messages",
+          select: "message isRead createdAt",
+        });
+  
+      if (!conversation) {
+        return res.status(404).json({ message: "Conversation not found" });
+      }
+  
+      // Prepare a response that separates participants and messages
+      res.status(200).json({
+        conversationId,
+        participants: conversation.participants, // Participant details
+        messages: conversation.messages, // List of messages without repeated participant info
+      });
+    } catch (error) {
+      console.error("Error retrieving messages:", error);
+      res.status(500).json({ message: "Error retrieving messages", error });
+    }
+  };
   
 
 //   controller for marked as read unread messages
