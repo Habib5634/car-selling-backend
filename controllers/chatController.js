@@ -35,7 +35,7 @@ const sendMessageController = async (req, res) => {
   
       // Add the message reference to the conversation's messages array
       conversation.messages.push(savedMessage._id);
-      await conversation.save();
+      const savedConversation = await conversation.save();
   
       // Emit the new message to the receiver using WebSocket (if connected)
     //   if (receiverId) {
@@ -48,6 +48,7 @@ const sendMessageController = async (req, res) => {
       res.status(201).json({
         message: "Message sent successfully",
         data: savedMessage,
+        savedConversation
       });
     } catch (error) {
       console.error("Error sending message:", error);
