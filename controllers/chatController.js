@@ -221,8 +221,45 @@ const deleteConversationController = async (req, res) => {
     }
   };
   
+  const countUnreadConversationsController = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        // Step 1: Find conversations where the user is a participant
+        const conversations = await conversationModel.find({
+            participants: userId,
+        }).populate({
+            path: "messages",
+            match: { isRead: false, receiverId: userId }, // Only include unread messages for the user
+        });
+
+        if (!conversations || conversations.length === 0) {
+            return res.status(200).json({
+                success: true,
+                count: 0,
+            });
+        }
+
+        // Step 2: Filter conversations that have unread messages
+        const unreadConversationsCount = conversations.filter((conversation) => {
+            return conversation.messages.length > 0; // Check if there are unread messages
+        }).length;
+
+        res.status(200).json({
+            success: true,
+            count: unreadConversationsCount,
+        });
+    } catch (error) {
+        console.error("Error counting unread conversations:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error counting unread conversations",
+            error,
+        });
+    }
+};
 
   
 
-  module.exports = {sendMessageController,getMessagesController,getConversationController,markMessagesAsReadController,deleteMessageController,deleteConversationController}
+  module.exports = {sendMessageController,getMessagesController,getConversationController,markMessagesAsReadController,deleteMessageController,deleteConversationController,countUnreadConversationsController}
   

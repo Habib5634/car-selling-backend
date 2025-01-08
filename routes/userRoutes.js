@@ -2,7 +2,7 @@ const express = require('express')
 
 const authMiddleware = require('../middlewares/authMiddleware')
 const { addCarController, getAcceptedCars, getCarById, getAllCategoriesController, getCategoryByIdController, getLatestAcceptedCars, deleteCarById, updateCarDetailsById, getProductsByCategoryController, userPostedCarsController } = require('../controllers/carController')
-const { sendMessageController, getMessagesController, getConversationController, markMessagesAsReadController, deleteMessageController, deleteConversationController } = require('../controllers/chatController')
+const { sendMessageController, getMessagesController, getConversationController, markMessagesAsReadController, deleteMessageController, deleteConversationController, countUnreadConversationsController } = require('../controllers/chatController')
 const router = express.Router()
 
 // POST || Post car for selling
@@ -51,6 +51,8 @@ router.delete("/delete-message/:messageId",authMiddleware,deleteMessageControlle
 // delete conversation controller
 router.delete("/delete-conversation/:conversationId",authMiddleware,deleteConversationController)
 
+// unread conversation count GET
+router.get('/unread-conversation',authMiddleware,countUnreadConversationsController)
 
 
 module.exports = router
