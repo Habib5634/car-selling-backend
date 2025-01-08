@@ -121,7 +121,7 @@ const sendMessageController = async (req, res) => {
         })
         .populate({
           path: "messages",
-          select: "message isRead createdAt",
+          select: "message isRead createdAt senderId receiverId",
         });
   
       if (!conversation) {
